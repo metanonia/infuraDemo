@@ -10,8 +10,10 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class getBlockInfo {
 
@@ -37,6 +39,9 @@ public class getBlockInfo {
             infura.addHeader("Authorization", Credentials.basic("",infuraSecretKey))  ;
             Web3j web3 = Web3j.build(infura);
 
+            String Sql = "insert into eth_block (blockNumber, blockHash, txRoot, blockMiner, blockTime) "
+                    + "values (?, ?, ?, ?, ?)";
+            PreparedStatement psmt = conn.prepareStatement(Sql);
             for(int i=from; i<to; i++) {
                 try {
                     EthBlock.Block block = web3.ethGetBlockByNumber(new DefaultBlockParameterNumber(i), false)
@@ -46,13 +51,20 @@ public class getBlockInfo {
                     BigInteger blockTimestamp = block.getTimestamp();
                     String txRoot = block.getTransactionsRoot();
                     String blockMiner = block.getMiner();
-                    System.out.println("Block:" + blockHash + ":" + String.valueOf(blockHash.length()));
-                    System.out.println("Tx: " + txRoot + ":" + String.valueOf(txRoot.length()));
+
+                    psmt.clearParameters();
+                    psmt.setBigDecimal(1, new BigDecimal(blockNumber));
+                    psmt.setString(2, blockHash);
+                    psmt.setString(3, txRoot);
+                    psmt.setString(4, blockMiner);
+                    psmt.setInt(5, blockTimestamp.intValue());
+
+                    psmt.executeUpdate();
                 } catch (IOException e) {
                     continue;
                 }
             }
-
+            psmt.close();
             web3.shutdown();
         } catch (Exception e) {
             e.printStackTrace();

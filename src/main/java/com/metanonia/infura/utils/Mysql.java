@@ -24,15 +24,6 @@ public class Mysql {
             logger.info(e.toString());
             System.exit(1);
         }
-        finally {
-            try {
-                if(statement != null) statement.close();
-                if(conn != null) conn.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-            logger.info("mysql connected");
-        }
     }
 
     public void close() {
