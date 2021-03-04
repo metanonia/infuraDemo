@@ -71,6 +71,6 @@ public class getBlockInfo {
         } finally {
             if(mysql != null) mysql.close();
         }
-
+        System.exit(0);
     }
 }
