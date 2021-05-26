@@ -18,18 +18,19 @@ import java.sql.PreparedStatement;
 public class getBlockInfo {
 
     public static void main(String[] args) {
-        if(args.length != 4){
-            System.out.println("getBlockInfo <infura_projectid> <infura_secretkey>  blockNumber_from blockNumber_to");
+        if(args.length != 6){
+            System.out.println("getBlockInfo <infura_projectid> <infura_secretkey>  blockNumber_from blockNumber_to mysql_id mysql_password");
             System.exit(1);
         }
-        final String USER_NAME = "metanonia";
-        final String PASSWORD = "test!@#";
+
         final String InfuraUrl = "https://mainnet.infura.io/v3/";
         Mysql mysql = null;
         String infuraProjectId = args[0];
         String infuraSecretKey = args[1];
         Integer from = Integer.parseInt(args[2]);
         Integer to = Integer.parseInt(args[3]);
+        String USER_NAME = args[4];
+        String PASSWORD = args[5];
 
         try {
             mysql = new Mysql(USER_NAME, PASSWORD);
