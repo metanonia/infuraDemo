@@ -40,8 +40,8 @@ public class getBlockInfo {
             infura.addHeader("Authorization", Credentials.basic("",infuraSecretKey))  ;
             Web3j web3 = Web3j.build(infura);
 
-            String Sql = "insert into eth_block (blockNumber, blockHash, txRoot, blockMiner, blockTime) "
-                    + "values (?, ?, ?, ?, ?)";
+            String Sql = "insert into eth_block (blockNumber, blockHash, txRoot, blockMiner, blockTime, mixHash, uncleHash, receiptHash) "
+                    + "values (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement psmt = conn.prepareStatement(Sql);
             for(int i=from; i<to; i++) {
                 try {
@@ -51,6 +51,9 @@ public class getBlockInfo {
                     String blockHash = block.getHash();
                     BigInteger blockTimestamp = block.getTimestamp();
                     String txRoot = block.getTransactionsRoot();
+                    String maxHash = block.getMixHash();
+                    String uncleHash = block.getSha3Uncles();
+                    String receiptHash = block.getReceiptsRoot();
                     String blockMiner = block.getMiner();
 
                     psmt.clearParameters();
@@ -59,6 +62,9 @@ public class getBlockInfo {
                     psmt.setString(3, txRoot);
                     psmt.setString(4, blockMiner);
                     psmt.setInt(5, blockTimestamp.intValue());
+                    psmt.setString(6, maxHash);
+                    psmt.setString(7, uncleHash);
+                    psmt.setString(8, receiptHash);
 
                     psmt.executeUpdate();
                 } catch (IOException e) {
