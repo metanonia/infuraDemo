@@ -16,7 +16,6 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
 
-// da29b6a2b24c4081a4ee84189060d8f2 eb3006e4ce604f18b7773b5463c61b86 10726673 12790316 metanonia m2tan0n1a!
 public class getDaonTr {
     final static  String DAON_ADDRESS = "0x80504F30f38b4149D95faE61BdE9F3Ee204ea9d5";
     public static void main(String[] args) {
